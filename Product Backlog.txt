@@ -1,0 +1,21 @@
+
+1- build a home page with a header to show the list of pages available in the system
+2- Camera: 
+	- user can open the camera
+	- blur the background 
+	- change the background to a color
+	- change the background to an image that he uploads
+	- snap a picture and save it locally
+	- logged in users to save picture in the cloud
+3- Mic:
+	- user can record a short clip
+	- save it locally
+	- logged in users to save clips in the cloud
+	
+4- Video:
+	- user can open the camera
+	- blur the background 
+	- change the background to a color
+	- change the background to an image that he uploads
+	- snap a video and save it locally
+	- logged in users to save video in the cloud
