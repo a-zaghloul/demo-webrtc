@@ -1,4 +1,11 @@
-video {
+video, canvas {
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
+  }
+
+  #canvas {
+    /* background-color: red; */
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 10px;
   }

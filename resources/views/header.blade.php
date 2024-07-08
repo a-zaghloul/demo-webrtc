@@ -7,13 +7,12 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <script src="{{ asset('js/app.js') }}"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <title>WebRTC Demo!</title>
   </head>
   <body>
 
-  <nav class="navbar navbar-light bg-white navbar-expand-sm border-bottom border-primary">
+  <nav class="navbar navbar-dark bg-dark navbar-expand-sm border-bottom border-primary">
         <!-- Logo -->
         <a href="/">
           <i class="fas fa-tachometer-alt"></i>
@@ -25,27 +24,27 @@
         <!-- Links -->
 
         <ul class="navbar-nav">
-            <li class="nav-item {{ (request()->is('dashboard')) ? 'active' : '' }}">
+            <li class="nav-item">
                 <h5><strong>
-                    <a href="/" class="bg-gray-900 text-black rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
+                    <a href="/" class="nav-link {{ (request()->is('/')) ? 'active' : '' }}" aria-current="page">Dashboard</a>
                 </strong></h5>
             </li>
 
-            <li class="nav-item {{ (request()->is('camera')) ? 'active' : '' }}">
+            <li class="nav-item">
                 <h5><strong>
-                    <a href="/camera" class="bg-gray-900 text-black rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Camera</a>
+                    <a href="/camera" class="nav-link {{ (request()->is('camera')) ? 'active' : '' }}" aria-current="page">Camera</a>
                 </strong></h5>
             </li>
 
-            <li class="nav-item {{ (request()->is('mic')) ? 'active' : '' }}">
+            <li class="nav-item">
                 <h5><strong>
-                    <a href="/mic" class="bg-gray-900 text-black rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Mic</a>
+                    <a href="/mic" class="nav-link {{ (request()->is('mic')) ? 'active' : '' }}" aria-current="page">Mic</a>
                 </strong></h5>
             </li>
 
-            <li class="nav-item {{ (request()->is('video')) ? 'active' : '' }}">
+            <li class="nav-item">
                 <h5><strong>
-                    <a href="/video" class="bg-gray-900 text-black rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Video</a>
+                    <a href="/video" class="nav-link {{ (request()->is('video')) ? 'active' : '' }}" aria-current="page">Video</a>
                 </strong></h5>
             </li>
         </ul>
