@@ -1,3 +1,4 @@
+</div>
 <footer class="navbar bg-dark" style="height:50px">
       <div class="text-center w-100 mt-2">
         <div class="d-inline text-white">

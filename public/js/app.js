@@ -1,4 +1,3 @@
-var _stop = false;
 async function logConnectedDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
     var ul = document.getElementById("devices");
@@ -13,7 +12,7 @@ async function logConnectedDevices() {
     return devices;
 }
 
-async function playVideoFromCamera(elementId = "localVideo") {
+async function playVideoFromCamera(elementId = "cameraOutput") {
     openCloseBtn = document.getElementById("openCamera");
     const videoElement = document.getElementById(elementId);
     if(openCloseBtn.innerText === "Open Camera") {
@@ -29,7 +28,8 @@ async function playVideoFromCamera(elementId = "localVideo") {
               };
 
             openCloseBtn.innerText = "Close Camera";
-            openCloseBtn.className = "btn btn-danger btn-block";
+            openCloseBtn.className = "btn btn-dark btn-block text-danger";
+            document.getElementById("cameraFooter").style.display = '';
 
         } catch(error) {
             console.error('Error opening video camera.', error);
@@ -39,15 +39,15 @@ async function playVideoFromCamera(elementId = "localVideo") {
             // Stop all tracks to turn off the camera
             videoElement.srcObject.getTracks().forEach(track => track.stop());
             videoElement.srcObject = null;
-            document.getElementById("isBackgroundRemoved").value = false;
+            document.getElementById("isBackgroundRemoved").value = "";
             canvasElement = document.getElementById("canvas")
             canvasElement.value = null;
             ctx = canvasElement.getContext('2d');
             ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
           }
         openCloseBtn.innerText = "Open Camera";
-        openCloseBtn.className = "btn btn-success btn-block";
+        openCloseBtn.className = "btn btn-light btn-block text-success";
+        document.getElementById("cameraFooter").style.display = 'none';
     }
 
 }
@@ -83,13 +83,16 @@ function processSegmentation(segmentation) {
       webcamCanvasCtx.putImageData(imgData, 0, 0);
 }
 
-function blurBackground (elementId = "localVideo", blurPercentage = 50) {
+function blurBackground (elementId = "cameraOutput", blurPercentage = 50) {
     removeBackground(elementId, blurPercentage);
 }
-async function removeBackground(elementId = "localVideo", blurPercentage = 0) {
+
+function changeBackgroundColor(elementId = "cameraOutput", bgColor = "#ffffff") {
+    removeBackground(elementId, 255, hexToRgb(bgColor));
+}
+async function removeBackground(elementId = "cameraOutput", blurPercentage = 0, bgColor = false) {
     videoElement = document.getElementById(elementId);
-    _stop = false;
-    isBackgroundRemoved = document.getElementById("isBackgroundRemoved");
+    isBackgroundRemoved = Boolean(document.getElementById("isBackgroundRemoved").value);
     if (!videoElement) {
       console.error('Video element not found.');
       return;
@@ -103,8 +106,7 @@ async function removeBackground(elementId = "localVideo", blurPercentage = 0) {
     canvasElement.height = 250;
     const ctx = canvasElement.getContext('2d');
     const segmentBackground = async () => {
-      if (!isBackgroundRemoved.value) return;
-
+      if (!isBackgroundRemoved) return;
       // Perform segmentation
       const segmentation = await net.segmentPerson(videoElement);
 
@@ -119,35 +121,52 @@ async function removeBackground(elementId = "localVideo", blurPercentage = 0) {
       for (let i = 0; i < pixelData.length; i++) {
         if (pixelData[i] === 0) {
           // Set background pixels to transparent
-          imageDataData[i * 4 + 3] = blurPercentage;
+          if(bgColor) {
+            imageDataData[i * 4] = bgColor[0];
+            imageDataData[i * 4 + 1] = bgColor[1];
+            imageDataData[i * 4 + 2] = bgColor[2];
+          } else {
+            imageDataData[i * 4 + 3] = blurPercentage;
+          }
         }
       }
 
       // Put the processed image data back on the canvas
       ctx.putImageData(imageData, 0, 0);
-
-      if(! _stop) {
-        requestAnimationFrame(segmentBackground);
-      }
+      requestAnimationFrame(segmentBackground);
     };
 
-    isBackgroundRemoved.value = true;
-    canvasElement.style.display = 'block';
+    document.getElementById("isBackgroundRemoved").value = "true";
+    isBackgroundRemoved = Boolean(document.getElementById("isBackgroundRemoved").value);
+    canvasElement.style.display = '';
     segmentBackground();
   }
 
-  function clearCanvas() {
-    _stop = true;
-    canvasElement = document.getElementById('canvas');
-    canvasElement.width = 320;
-    canvasElement.height = 250;
-    const ctx = canvasElement.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    canvasElement.style.display = 'none';
-    setTimeout(tempFunction, 10000);
-    // setTimeout(myGreeting, 5000);
+  async function clearCanvas() {
+    canvasElement = document.getElementById("canvas");
+    canvasElement.value = null;
+    document.getElementById("canvas").style.display = 'none';
+    document.getElementById("isBackgroundRemoved").value = "";
+    ctx = canvasElement.getContext('2d');
+    ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   }
 
-  function tempFunction() {
-    console.log('stopped...');
+  function hexToRgb(hex) {
+    const bigint = parseInt(hex.slice(1), 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return [r, g, b];
+  }
+
+
+  function toggleEffectsDiv() {
+    effectsDiv = document.getElementById('effectsDiv').style.display;
+    if(effectsDiv == 'none') {
+        document.getElementById('effectsDiv').style.display = '';
+        document.getElementById('stopEffectsDiv').style.display = 'none';
+    } else {
+        document.getElementById('effectsDiv').style.display = 'none';
+        document.getElementById('stopEffectsDiv').style.display = '';
+    }
   }

@@ -9,3 +9,7 @@ video, canvas {
     background-size: cover;
     margin-bottom: 10px;
   }
+
+  .border-thick {
+        border-width:3px !important;
+    }

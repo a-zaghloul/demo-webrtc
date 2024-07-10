@@ -1,7 +1,3 @@
-@include('header')
-<div class="p-4">
+@include('header', ['pageTitle' => 'Video'])
 
-    <h1>Video...</h1>
-
-</div>
 @include('footer')
