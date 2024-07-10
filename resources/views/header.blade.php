@@ -64,6 +64,6 @@
             -->
         </ul>
     </nav>
-    <div class="p-3 m-2 border border-success rounded border-thick">
+    <div class="p-4 m-4 border border-success rounded border-thick">
         <h3 class="text-center border-bottom border-thick p-4 mb-4 bg-light text-dark rounded-lg font-weight-bolder">{{ $pageTitle }}</h3>
 

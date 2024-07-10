@@ -28,7 +28,7 @@ async function playVideoFromCamera(elementId = "cameraOutput") {
               };
 
             openCloseBtn.innerText = "Close Camera";
-            openCloseBtn.className = "btn btn-dark btn-block text-danger";
+            openCloseBtn.className = "btn btn-dark btn-block text-success";
             document.getElementById("cameraFooter").style.display = '';
 
         } catch(error) {
@@ -169,4 +169,27 @@ async function removeBackground(elementId = "cameraOutput", blurPercentage = 0, 
         document.getElementById('effectsDiv').style.display = 'none';
         document.getElementById('stopEffectsDiv').style.display = '';
     }
+  }
+
+  function takeSnapshotCanvas() {
+    canvasElement = document.getElementById("canvas");
+    if (!canvasElement) return;
+    const link = document.createElement('a');
+    link.href = canvasElement.toDataURL('image/png');
+    link.download = 'modifiedsnapshot.png';
+    link.click();
+  }
+
+  function takeSnapshotVideo() {
+    videoElement = document.getElementById("cameraOutput");
+    if (!videoElement) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = 'originalsnapshot.png';
+    link.click();
   }
