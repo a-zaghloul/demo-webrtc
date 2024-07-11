@@ -193,3 +193,44 @@ async function removeBackground(elementId = "cameraOutput", blurPercentage = 0, 
     link.download = 'originalsnapshot.png';
     link.click();
   }
+
+  (function() {
+    let mediaRecorder;
+    let audioChunks = [];
+
+    document.getElementById('startRecording').addEventListener('click', async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = event => {
+        audioChunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audioPlayback = document.getElementById('audioPlayback');
+        const downloadButton = document.getElementById('downloadRecording');
+
+        audioPlayback.src = audioUrl;
+        // audioPlayback.style.display = 'block';
+
+        downloadButton.href = audioUrl;
+        downloadButton.download = 'recording.wav';
+        // downloadButton.style.display = 'block';
+      };
+
+      mediaRecorder.start();
+      document.getElementById('startRecording').disabled = true;
+      document.getElementById('downloadRecording').disabled = true;
+      document.getElementById('stopRecording').disabled = false;
+
+    });
+
+    document.getElementById('stopRecording').addEventListener('click', () => {
+      mediaRecorder.stop();
+      document.getElementById('stopRecording').disabled = true;
+      document.getElementById('downloadRecording').disabled = false;
+      document.getElementById('startRecording').disabled = false;
+    });
+  })();
