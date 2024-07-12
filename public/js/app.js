@@ -198,39 +198,94 @@ async function removeBackground(elementId = "cameraOutput", blurPercentage = 0, 
     let mediaRecorder;
     let audioChunks = [];
 
-    document.getElementById('startRecording').addEventListener('click', async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
+    if(document.getElementById('startRecording') != null) {
+        document.getElementById('startRecording').addEventListener('click', async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
 
-      mediaRecorder.ondataavailable = event => {
-        audioChunks.push(event.data);
-      };
+        mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+        };
 
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audioPlayback = document.getElementById('audioPlayback');
-        const downloadButton = document.getElementById('downloadRecording');
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audioPlayback = document.getElementById('audioPlayback');
+            const downloadButton = document.getElementById('downloadRecording');
 
-        audioPlayback.src = audioUrl;
-        // audioPlayback.style.display = 'block';
+            audioPlayback.src = audioUrl;
+            // audioPlayback.style.display = 'block';
 
-        downloadButton.href = audioUrl;
-        downloadButton.download = 'recording.wav';
-        // downloadButton.style.display = 'block';
-      };
+            downloadButton.href = audioUrl;
+            downloadButton.download = 'recording.wav';
+            // downloadButton.style.display = 'block';
+        };
 
-      mediaRecorder.start();
-      document.getElementById('startRecording').disabled = true;
-      document.getElementById('downloadRecording').disabled = true;
-      document.getElementById('stopRecording').disabled = false;
+        mediaRecorder.start();
+        document.getElementById('startRecording').disabled = true;
+        document.getElementById('downloadRecording').disabled = true;
+        document.getElementById('stopRecording').disabled = false;
 
-    });
+        });
+}
 
-    document.getElementById('stopRecording').addEventListener('click', () => {
-      mediaRecorder.stop();
-      document.getElementById('stopRecording').disabled = true;
-      document.getElementById('downloadRecording').disabled = false;
-      document.getElementById('startRecording').disabled = false;
-    });
+    if(document.getElementById('startRecording') != null) {
+        document.getElementById('stopRecording').addEventListener('click', () => {
+        mediaRecorder.stop();
+        document.getElementById('stopRecording').disabled = true;
+        document.getElementById('downloadRecording').disabled = false;
+        document.getElementById('startRecording').disabled = false;
+        });
+    }
+  })();
+
+  (function() {
+    let mediaRecorder;
+    let videoChunks = [];
+
+    const videoPreview = document.getElementById('videoPreview');
+    const videoPlayback = document.getElementById('videoPlayback');
+    const downloadButton = document.getElementById('downloadVideoRecording');
+
+    if(document.getElementById('startVideoRecording') != null) {
+        document.getElementById('startVideoRecording').addEventListener('click', async () => {
+            videoChunks = [];
+            videoPreview.style.display = 'block';
+            videoPlayback.style.display = 'none';
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            videoPreview.srcObject = stream;
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = event => {
+              videoChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+              const videoBlob = new Blob(videoChunks, { type: 'video/webm' });
+              const videoUrl = URL.createObjectURL(videoBlob);
+
+              videoPlayback.src = videoUrl;
+              videoPlayback.style.display = 'block';
+
+              downloadButton.href = videoUrl;
+              downloadButton.download = 'video-recording.webm';
+            //   downloadButton.style.display = 'block';
+            };
+
+            mediaRecorder.start();
+            document.getElementById('startVideoRecording').disabled = true;
+            document.getElementById('stopVideoRecording').disabled = false;
+          });
+    }
+
+    if(document.getElementById('stopVideoRecording') != null) {
+        document.getElementById('stopVideoRecording').addEventListener('click', () => {
+            mediaRecorder.stop();
+            videoPreview.srcObject.getTracks().forEach(track => track.stop());
+            document.getElementById('stopVideoRecording').disabled = true;
+            document.getElementById('startVideoRecording').disabled = false;
+            videoPreview.style.display = 'none';
+            videoPlayback.style.display = 'block';
+        });
+    }
   })();

@@ -26,19 +26,13 @@
         <ul class="navbar-nav">
             <li class="nav-item">
                 <h5><strong>
-                    <a href="/" class="nav-link {{ (request()->is('/')) ? 'active' : '' }}" aria-current="page">Dashboard</a>
-                </strong></h5>
-            </li>
-
-            <li class="nav-item">
-                <h5><strong>
                     <a href="/camera" class="nav-link {{ (request()->is('camera')) ? 'active' : '' }}" aria-current="page">Camera</a>
                 </strong></h5>
             </li>
 
             <li class="nav-item">
                 <h5><strong>
-                    <a href="/mic" class="nav-link {{ (request()->is('mic')) ? 'active' : '' }}" aria-current="page">Mic</a>
+                    <a href="/audio" class="nav-link {{ (request()->is('audio')) ? 'active' : '' }}" aria-current="page">Audio</a>
                 </strong></h5>
             </li>
 
@@ -65,5 +59,5 @@
         </ul>
     </nav>
     <div class="p-4 m-4 border border-success rounded border-thick">
-        <h3 class="text-center border-bottom border-thick p-4 mb-4 bg-light text-dark rounded-lg font-weight-bolder">{{ $pageTitle }}</h3>
+        <h3 class="text-center border-bottom border-thick p-4 mb-4 bg-light text-success rounded-lg font-weight-bolder">{{ $pageTitle }}</h3>
 

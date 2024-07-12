@@ -1,15 +1,14 @@
 video, canvas {
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-  }
-
-  #canvas {
-    /* background-color: red; */
+    transform: scale(-1,1);
+}
+video::-webkit-media-controls-panel {
+    transform: scale(-1,1);
+}
+#canvas {
     background-repeat: no-repeat;
     background-size: cover;
-    margin-bottom: 10px;
-  }
+}
 
-  .border-thick {
-        border-width:3px !important;
-    }
+.border-thick {
+    border-width:3px !important;
+}
