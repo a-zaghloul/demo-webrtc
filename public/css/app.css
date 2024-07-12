@@ -1,0 +1,14 @@
+video, canvas {
+    transform: scale(-1,1);
+}
+video::-webkit-media-controls-panel {
+    transform: scale(-1,1);
+}
+#canvas {
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.border-thick {
+    border-width:3px !important;
+}
